@@ -3,6 +3,7 @@ import "./CarRace.css";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { useNavigate } from "react-router-dom";
+import { startRaceAPI } from "../utils/api";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8080";
 const socketUrl = API_BASE + "/race-ws";
@@ -23,11 +24,7 @@ const CarRace = ({ carList }) => {
     setCars({});
     setFinishOrder([]);
 
-    await fetch(API_BASE + `/api/start-race`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cars: carList }),
-    });
+    await startRaceAPI(carList);
 
     setRacePhase("racing");
   };

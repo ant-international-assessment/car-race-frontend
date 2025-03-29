@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AuthPage.css";
-
-const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8080";
+import { signupAPI } from "../utils/api";
 
 const SignupPage = () => {
   const [email, setEmail] = useState("");
@@ -11,11 +10,7 @@ const SignupPage = () => {
 
   const handleSignup = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/auth/signup`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
+      const res = await signupAPI(email, password);
 
       if (!res.ok) throw new Error(await res.text());
 

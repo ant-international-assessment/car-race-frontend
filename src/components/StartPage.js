@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./StartPage.css";
 import { useNavigate } from "react-router-dom";
-
-const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8080";
+import { startRaceAPI, fetchLeaderboardAPI } from "../utils/api";
 
 const StartPage = ({ setRaceStarted, setCarList, user }) => {
   const [numCars, setNumCars] = useState(2);
@@ -37,11 +36,7 @@ const StartPage = ({ setRaceStarted, setCarList, user }) => {
 
     console.log("Car list:", cars);
 
-    await fetch(API_BASE + "/api/start-race", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ cars }),
-    });
+    await startRaceAPI(cars);
 
     setCarList(cars);
     navigate("/race");
@@ -49,8 +44,7 @@ const StartPage = ({ setRaceStarted, setCarList, user }) => {
 
   const fetchLeaderboard = async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/leaderboard`);
-      const data = await res.json();
+      const data = await fetchLeaderboardAPI();
       setLeaderboard(data);
     } catch (err) {
       console.error("Failed to load leaderboard:", err);
