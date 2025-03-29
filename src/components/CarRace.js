@@ -53,7 +53,6 @@ const CarRace = ({ carList }) => {
           });
         });
 
-        // // ✅ Start race only AFTER websocket is ready
         // setRacePhase("init");
         // setCars({});
         // setFinishOrder([]);
