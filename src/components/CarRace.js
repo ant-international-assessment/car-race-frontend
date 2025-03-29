@@ -2,22 +2,26 @@ import React, { useEffect, useState, useRef } from "react";
 import "./CarRace.css";
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
+import { useNavigate } from "react-router-dom";
+
 const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
 const socketUrl = API_BASE + "/race-ws";
 
-const CarRace = ({ carList, resetToStart }) => {
+const CarRace = ({ carList }) => {
   const [cars, setCars] = useState({});
   const [finishOrder, setFinishOrder] = useState([]);
   const clientRef = useRef(null);
   const [racePhase, setRacePhase] = useState("init");
   const [liveRanking, setLiveRanking] = useState([]);
   const carsRef = useRef({});
+  const navigate = useNavigate();
 
   const startRace = async () => {
     setRacePhase("init"); // reset phase before race starts
     setCars({});
     setFinishOrder([]);
+    console.log("Car list:", cars);
 
     await fetch(API_BASE + `/api/start-race`, {
       method: "POST",
@@ -70,22 +74,13 @@ const CarRace = ({ carList, resetToStart }) => {
 
   useEffect(() => {
     if (finishOrder.length === carList.length) {
-      const rankingNames = finishOrder.map((car) => car.name);
-
-      // 👇 Freeze the ranking so real-time updates stop
       setLiveRanking(finishOrder);
-
-      fetch(API_BASE + "/api/update-score", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(rankingNames),
-      });
     }
   }, [finishOrder, carList]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (finishOrder.length === carList.length) return; // 👈 don't update after finished
+      if (finishOrder.length === carList.length) return;
 
       const rankedCars = Object.values(carsRef.current)
         .filter((c) => c.status === "RUNNING" || c.status === "FINISHED")
@@ -123,7 +118,7 @@ const CarRace = ({ carList, resetToStart }) => {
             <button className="re-race-button" onClick={startRace}>
               🔁 Re-Race
             </button>
-            <button className="back-button" onClick={resetToStart}>
+            <button className="back-button" onClick={() => navigate("/start")}>
               🔙 Back to Start Page
             </button>
           </>

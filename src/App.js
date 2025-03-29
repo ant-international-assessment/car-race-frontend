@@ -49,7 +49,7 @@ function App() {
           path="/race"
           element={
             user ? (
-              <CarRace carList={carList} resetToStart={() => {}} />
+              <CarRace carList={carList} />
             ) : (
               <Navigate to="/login" replace />
             )

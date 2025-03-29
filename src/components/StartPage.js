@@ -25,8 +25,15 @@ const StartPage = ({ setRaceStarted, setCarList, user }) => {
 
     for (let i = 1; i <= numCars; i++) {
       const name = i === 1 ? userCarName : `Car ${i}`;
-      cars.push({ id: i, name, isUser: i === 1 });
+      cars.push({
+        id: i,
+        name,
+        isUser: i === 1,
+        username: i === 1 ? userCarName : "",
+      });
     }
+
+    console.log("Car list:", cars);
 
     await fetch(API_BASE + "/api/start-race", {
       method: "POST",
