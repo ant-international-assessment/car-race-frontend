@@ -56,18 +56,18 @@ const CarRace = ({ carList }) => {
           });
         });
 
-        // ✅ Start race only AFTER websocket is ready
-        setRacePhase("init");
-        setCars({});
-        setFinishOrder([]);
+        // // ✅ Start race only AFTER websocket is ready
+        // setRacePhase("init");
+        // setCars({});
+        // setFinishOrder([]);
 
-        await fetch(API_BASE + `/api/start-race`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ cars: carList }),
-        });
+        // await fetch(API_BASE + `/api/start-race`, {
+        //   method: "POST",
+        //   headers: { "Content-Type": "application/json" },
+        //   body: JSON.stringify({ cars: carList }),
+        // });
 
-        setRacePhase("racing");
+        // setRacePhase("racing");
       },
     });
 
