@@ -17,7 +17,7 @@
   margin-top: 10px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 0px;
 }
 
 .car-wrapper {
@@ -27,7 +27,7 @@
   border-bottom: 4px dashed white;
   background-color: #4e4e4e;
   position: relative;
-  border-radius: 2px;
+  border-radius: 1px;
 }
 
 .track {
@@ -38,14 +38,18 @@
 }
 
 .track::after {
-  content: '🏁';
+  content: '';
   position: absolute;
-  right: 5px;
+  right: 0;
   top: 0;
   height: 100%;
-  display: flex;
-  align-items: center;
+  width: 30px;
+  background-image: url('/public/finish_line.png');
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: 1;
 }
+
 
 .car {
   position: absolute;
@@ -53,6 +57,10 @@
   height: 48px;
   width: 36px;
   transition: left 0.5s ease;
+  z-index: 2;
+}
+.car.no-transition {
+  transition: none !important;
 }
 
 .car img {
@@ -60,11 +68,89 @@
   height: 100%;
   object-fit: contain;
 }
-
 .ranking-board {
-  background-color: #e0ffe0;
-  padding: 10px;
-  border-radius: 8px;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  margin: 20px auto;
+  text-align: center;
+}
+
+.ranking-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.ranking-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ranking-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  border-bottom: 1px dashed #ddd;
+  font-size: 16px;
+  color: #444;
+}
+
+.ranking-item:last-child {
+  border-bottom: none;
+}
+
+.ranking-position {
+  font-weight: bold;
+  width: 24px;
+  text-align: left;
+}
+
+.ranking-name {
+  flex: 1;
+  text-align: center;
+}
+
+.ranking-medal {
+  font-size: 20px;
+  width: 30px;
+  text-align: right;
+}
+
+.re-race-button {
+  margin-top: 12px;
+  width: 100%;
+  background-color: #007bff;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.re-race-button:hover {
+  background-color: #0056b3;
+}
+.back-button {
+  margin-top: 12px;
+  width: 100%;
+  background-color: #6c757d;
+  color: white;
+  padding: 12px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.back-button:hover {
+  background-color: #5a6268;
 }
