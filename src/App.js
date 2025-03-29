@@ -1,50 +1,54 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
 } from "react-router-dom";
+
 import StartPage from "./components/StartPage";
 import CarRace from "./components/CarRace";
 import SignupPage from "./components/SignupPage";
 import LoginPage from "./components/LoginPage";
 
 function App() {
-  const [user, setUser] = useState(null); // This will be updated on login
+  const [user, setUser] = useState(null);
   const [carList, setCarList] = useState([]);
+  const [loading, setLoading] = useState(true); // ✅ prevent redirect too early
 
-  // Load user from localStorage if already logged in
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
+    const token = localStorage.getItem("token");
+    const email = localStorage.getItem("email");
+
+    if (token && email) {
+      setUser({ email, token });
     }
+
+    setLoading(false); // ✅ done checking localStorage
   }, []);
+
+  if (loading) return <div>Loading...</div>; // Or a spinner/loading screen
 
   return (
     <Router>
       <Routes>
-        {/* ✅ Public routes */}
         <Route path="/signup" element={<SignupPage />} />
         <Route path="/login" element={<LoginPage setUser={setUser} />} />
 
-        {/* ✅ Protected routes */}
         <Route
           path="/start"
           element={
             user ? (
               <StartPage
-                user={user}
                 setCarList={setCarList}
                 setRaceStarted={() => {}}
+                user={user}
               />
             ) : (
               <Navigate to="/login" replace />
             )
           }
         />
-
         <Route
           path="/race"
           element={
@@ -56,7 +60,6 @@ function App() {
           }
         />
 
-        {/* ✅ Default fallback */}
         <Route
           path="*"
           element={<Navigate to={user ? "/start" : "/login"} />}

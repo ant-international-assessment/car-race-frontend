@@ -58,6 +58,19 @@
   width: 36px;
   transition: left 0.5s ease;
   z-index: 2;
+  /* position: relative; */
+  display: flex;
+  align-items: center;
+}
+.car-label {
+  width: 20px;
+  margin-right: 15px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #e3e3e3;
+  /* background-color: #ddd; */
+  padding: 10px;
+  
 }
 .car.no-transition {
   transition: none !important;
@@ -76,6 +89,7 @@
   max-width: 400px;
   margin: 20px auto;
   text-align: center;
+  margin-bottom: 50px;
 }
 
 .ranking-title {
@@ -153,4 +167,17 @@
 
 .back-button:hover {
   background-color: #5a6268;
+}
+
+.score-earned {
+  font-size: 18px;
+  font-weight: 500;
+  margin: 12px 0;
+  text-align: center;
+  color: #2f855a;
+}
+.ranking-score {
+  margin-left: 12px;
+  color: #4a5568;
+  font-weight: 500;
 }

@@ -24,7 +24,7 @@ const StartPage = ({ setRaceStarted, setCarList, user }) => {
     const cars = [];
 
     for (let i = 1; i <= numCars; i++) {
-      const name = i === 1 ? userCarName : `Car ${i}`;
+      const name = i === 1 ? userCarName : `Car No.${i}`;
       cars.push({
         id: i,
         name,

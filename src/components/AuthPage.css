@@ -23,6 +23,7 @@
   }
   
   .auth-input {
+    box-sizing: border-box;
     width: 100%;
     padding: 10px 12px;
     margin-bottom: 14px;

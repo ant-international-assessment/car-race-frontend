@@ -26,6 +26,8 @@ const LoginPage = ({ setUser }) => {
 
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify({ email }));
+      localStorage.setItem("email", email);
+
       setUser({ email });
       navigate("/start");
     } catch (err) {

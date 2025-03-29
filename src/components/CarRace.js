@@ -5,23 +5,23 @@ import SockJS from "sockjs-client";
 import { useNavigate } from "react-router-dom";
 
 const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8080";
-
 const socketUrl = API_BASE + "/race-ws";
 
 const CarRace = ({ carList }) => {
   const [cars, setCars] = useState({});
   const [finishOrder, setFinishOrder] = useState([]);
-  const clientRef = useRef(null);
   const [racePhase, setRacePhase] = useState("init");
   const [liveRanking, setLiveRanking] = useState([]);
+  const clientRef = useRef(null);
   const carsRef = useRef({});
   const navigate = useNavigate();
 
+  const calculateScore = (position) => Math.max(100 - position * 10, 0);
+
   const startRace = async () => {
-    setRacePhase("init"); // reset phase before race starts
+    setRacePhase("init");
     setCars({});
     setFinishOrder([]);
-    console.log("Car list:", cars);
 
     await fetch(API_BASE + `/api/start-race`, {
       method: "POST",
@@ -29,10 +29,9 @@ const CarRace = ({ carList }) => {
       body: JSON.stringify({ cars: carList }),
     });
 
-    setRacePhase("racing"); // enable animation again
+    setRacePhase("racing");
   };
 
-  // Run once on mount to start the initial race
   useEffect(() => {
     startRace();
   }, []);
@@ -49,7 +48,7 @@ const CarRace = ({ carList }) => {
               ...prevCars,
               [car.id]: car,
             };
-            carsRef.current = updatedCars; // 👈 keep the ref updated
+            carsRef.current = updatedCars;
             return updatedCars;
           });
 
@@ -92,38 +91,13 @@ const CarRace = ({ carList }) => {
     return () => clearInterval(interval);
   }, [finishOrder.length, carList.length]);
 
+  const userCar = carList.find((car) => car.isUser);
+  const userIndex = finishOrder.findIndex((car) => car.name === userCar?.name);
+  const earnedScore = userIndex >= 0 ? calculateScore(userIndex) : 0;
+
   return (
     <div className="container">
       <h2>🚦 Race in Progress</h2>
-
-      <div className="ranking-board">
-        <h3 className="ranking-title">🏁 Race Results</h3>
-        <ul className="ranking-list">
-          {liveRanking.map((car, index) => {
-            const medal =
-              index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "";
-
-            return (
-              <li key={car.id} className="ranking-item">
-                <span className="ranking-position">{index + 1}</span>
-                <span className="ranking-name">{car.name}</span>
-                <span className="ranking-medal">{medal}</span>
-              </li>
-            );
-          })}
-        </ul>
-
-        {finishOrder.length === carList.length && (
-          <>
-            <button className="re-race-button" onClick={startRace}>
-              🔁 Re-Race
-            </button>
-            <button className="back-button" onClick={() => navigate("/start")}>
-              🔙 Back to Start Page
-            </button>
-          </>
-        )}
-      </div>
 
       <div className="race-track">
         {carList.map((car) => (
@@ -137,6 +111,8 @@ const CarRace = ({ carList }) => {
                   left: `calc(${(cars[car.id]?.position || 0) / 10}% - 18px)`,
                 }}
               >
+                <div className="car-label">{car.name}</div>
+
                 <img
                   src={
                     carList.find((c) => c.id === car.id)?.isUser
@@ -149,6 +125,42 @@ const CarRace = ({ carList }) => {
             </div>
           </div>
         ))}
+      </div>
+      <div className="ranking-board">
+        <h3 className="ranking-title">🏁 Race Results</h3>
+        <ul className="ranking-list">
+          {liveRanking.map((car, index) => {
+            const medal =
+              index === 0 ? "🥇" : index === 1 ? "🥈" : index === 2 ? "🥉" : "";
+            const score = calculateScore(index);
+
+            return (
+              <li key={car.id} className="ranking-item">
+                <span className="ranking-position">{index + 1}</span>
+                <span className="ranking-name">
+                  {car.name}
+                  {carList.find((c) => c.name === car.name)?.isUser && " 👤"}
+                </span>
+                <span className="ranking-score">+{score}</span>
+                <span className="ranking-medal">{medal}</span>
+              </li>
+            );
+          })}
+        </ul>
+
+        {finishOrder.length === carList.length && (
+          <>
+            <p className="score-earned">
+              🎉 You earned: <strong>{earnedScore}</strong> points
+            </p>
+            <button className="re-race-button" onClick={startRace}>
+              🔁 Re-Race
+            </button>
+            <button className="back-button" onClick={() => navigate("/start")}>
+              🔙 Back to Start Page
+            </button>
+          </>
+        )}
       </div>
     </div>
   );
