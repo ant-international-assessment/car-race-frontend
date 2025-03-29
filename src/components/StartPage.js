@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from "react";
-import "./StartPage.css"; // Optional: use if you want custom CSS
+import "./StartPage.css";
 import { useNavigate } from "react-router-dom";
+
 const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8080";
 
 const StartPage = ({ setRaceStarted, setCarList, user }) => {
   const [numCars, setNumCars] = useState(2);
   const [userCarName, setUserCarName] = useState("");
+  const [leaderboard, setLeaderboard] = useState([]);
   const navigate = useNavigate();
-  // Auto-fill car name from user's email
+
   useEffect(() => {
     if (user?.email) {
       const nameFromEmail = user.email.split("@")[0];
@@ -42,13 +44,33 @@ const StartPage = ({ setRaceStarted, setCarList, user }) => {
     });
 
     setCarList(cars);
-    navigate("/race"); // ✅ Redirect to race page
+    navigate("/race");
+  };
+
+  const fetchLeaderboard = async () => {
+    try {
+      const res = await fetch(`${API_BASE}/api/leaderboard`);
+      const data = await res.json();
+      setLeaderboard(data);
+    } catch (err) {
+      console.error("Failed to load leaderboard:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchLeaderboard();
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("email");
+    window.location.href = "/login";
   };
 
   return (
-    <div className="start-container">
+    <div className="start-page-content">
       <div className="start-card">
-        <h1 className="title">🏎️ Ready, Set, Go!</h1>
+        <h1 className="title">Ready, Set, Go!</h1>
 
         <div className="form-group">
           <label>Number of Cars (2–10):</label>
@@ -63,7 +85,7 @@ const StartPage = ({ setRaceStarted, setCarList, user }) => {
         </div>
 
         <div className="form-group" style={{ marginTop: "10px" }}>
-          <label>Your Car Name (auto from email):</label>
+          <label>Your Car Name:</label>
           <input
             type="text"
             value={userCarName}
@@ -73,8 +95,25 @@ const StartPage = ({ setRaceStarted, setCarList, user }) => {
         </div>
 
         <button className="start-button" onClick={startRace}>
-          🚦 Start Race
+          Start Race
         </button>
+
+        <button className="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
+
+      <div className="leaderboard-card">
+        <h3 className="leaderboard-title">🏆 Leaderboard</h3>
+        <ul className="leaderboard-list">
+          {leaderboard.map((user, index) => (
+            <li key={user.userId} className="leaderboard-item">
+              <span className="rank">{index + 1}.</span>
+              <span className="user-id">{user.userId}</span>
+              <span className="score">{user.totalScore} pts</span>
+            </li>
+          ))}
+        </ul>
       </div>
     </div>
   );

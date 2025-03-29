@@ -33,21 +33,14 @@ const CarRace = ({ carList }) => {
   };
 
   useEffect(() => {
-    startRace();
-  }, []);
-
-  useEffect(() => {
     const client = new Client({
       webSocketFactory: () => new SockJS(socketUrl),
-      onConnect: () => {
+      onConnect: async () => {
         client.subscribe("/topic/car-progress", (message) => {
           const car = JSON.parse(message.body);
 
           setCars((prevCars) => {
-            const updatedCars = {
-              ...prevCars,
-              [car.id]: car,
-            };
+            const updatedCars = { ...prevCars, [car.id]: car };
             carsRef.current = updatedCars;
             return updatedCars;
           });
@@ -62,6 +55,19 @@ const CarRace = ({ carList }) => {
             return prevOrder;
           });
         });
+
+        // ✅ Start race only AFTER websocket is ready
+        setRacePhase("init");
+        setCars({});
+        setFinishOrder([]);
+
+        await fetch(API_BASE + `/api/start-race`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ cars: carList }),
+        });
+
+        setRacePhase("racing");
       },
     });
 
