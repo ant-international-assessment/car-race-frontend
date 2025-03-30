@@ -155,13 +155,13 @@ const CarRace = ({ carList }) => {
         {finishOrder.length === carList.length && (
           <>
             <p className="score-earned">
-              🎉 You earned: <strong>{earnedScore}</strong> points
+              You earned: <strong>{earnedScore}</strong> points
             </p>
             <button className="re-race-button" onClick={startRace}>
-              🔁 Re-Race
+              Re-Race
             </button>
             <button className="back-button" onClick={() => navigate("/start")}>
-              🔙 Back to Start Page
+              Back to Start Page
             </button>
           </>
         )}
