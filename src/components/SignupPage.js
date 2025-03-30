@@ -10,7 +10,10 @@ const SignupPage = () => {
 
   const handleSignup = async () => {
     try {
-      const res = await signupAPI(email, password);
+      // If no "@" present, append "@test.com"
+      const finalEmail = email.includes("@") ? email : `${email}@test.com`;
+
+      const res = await signupAPI(finalEmail, password);
 
       if (!res.ok) throw new Error(await res.text());
 
@@ -27,7 +30,7 @@ const SignupPage = () => {
         <h2 className="auth-title">📝 Sign Up</h2>
         <input
           type="email"
-          placeholder="Email"
+          placeholder="yourEmail@abc.com"
           className="auth-input"
           value={email}
           onChange={(e) => setEmail(e.target.value)}

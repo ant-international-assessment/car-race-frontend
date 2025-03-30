@@ -8,9 +8,15 @@ const LoginPage = ({ setUser }) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLogin = async (customEmail, customPassword) => {
     try {
-      const res = await loginAPI(email, password);
+      const rawEmail = customEmail ?? email;
+      const rawPassword = customPassword ?? password;
+      const finalEmail = rawEmail.includes("@")
+        ? rawEmail
+        : `${rawEmail}@test.com`;
+
+      const res = await loginAPI(finalEmail, rawPassword);
 
       if (!res.ok) {
         const errorText = await res.text();
@@ -20,10 +26,10 @@ const LoginPage = ({ setUser }) => {
       const data = await res.json();
 
       localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify({ email }));
-      localStorage.setItem("email", email);
+      localStorage.setItem("user", JSON.stringify({ email: finalEmail }));
+      localStorage.setItem("email", finalEmail);
 
-      setUser({ email });
+      setUser({ email: finalEmail });
       navigate("/start");
     } catch (err) {
       alert(`Login failed: ${err.message}`);
@@ -48,9 +54,17 @@ const LoginPage = ({ setUser }) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button className="auth-button" onClick={handleLogin}>
+        <button className="auth-button" onClick={() => handleLogin()}>
           Log In
         </button>
+
+        <button
+          className="auth-button test-login"
+          onClick={() => handleLogin("khoinguyen1", "123123")}
+        >
+          🔑 Login with Test Account
+        </button>
+
         <p className="auth-footer">
           Don’t have an account? <a href="/signup">Sign up</a>
         </p>
