@@ -27,12 +27,12 @@ export const decryptRequestBody = (encryptedBody, privateKey) => {
 };
 
 export const startRaceAPI = async (cars) => {
-  const encrypted = await encryptPayload({ cars });
-  console.log("startRaceAPI", encrypted);
+  //   const encrypted = await encryptPayload({ cars });
+  //   console.log("startRaceAPI", encrypted);
   const res = await fetch(`${API_BASE}/api/start-race`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ encrypted }),
+    body: JSON.stringify({ cars }),
   });
   return res;
 };

@@ -55,17 +55,10 @@ const CarRace = ({ carList }) => {
           });
         });
 
-        // setRacePhase("init");
-        // setCars({});
-        // setFinishOrder([]);
-
-        // await fetch(API_BASE + `/api/start-race`, {
-        //   method: "POST",
-        //   headers: { "Content-Type": "application/json" },
-        //   body: JSON.stringify({ cars: carList }),
-        // });
-
-        // setRacePhase("racing");
+        // ✅ Delay race start by 3 seconds after WebSocket connects
+        setTimeout(() => {
+          // startRace();
+        }, 3000);
       },
     });
 
