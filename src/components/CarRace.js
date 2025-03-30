@@ -7,7 +7,7 @@ import { startRaceAPI } from "../utils/api";
 
 const API_BASE =
   process.env.REACT_APP_API_URL ||
-  "https://ant-car-racing-632916040300.asia-southeast1.run.app";
+  "https://ant-international-assessment-632916040300.asia-southeast1.run.app";
 const socketUrl = API_BASE + "/race-ws";
 
 const CarRace = ({ carList }) => {
