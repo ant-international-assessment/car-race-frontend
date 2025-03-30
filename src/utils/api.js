@@ -2,7 +2,9 @@
 
 import { JSEncrypt } from "jsencrypt";
 
-const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8080";
+const API_BASE =
+  process.env.REACT_APP_API_URL ||
+  "https://ant-international-assessment-632916040300.asia-southeast1.run.app";
 
 export const fetchPublicKey = async () => {
   const res = await fetch(`${API_BASE}/api/public-key`);

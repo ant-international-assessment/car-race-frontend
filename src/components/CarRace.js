@@ -5,7 +5,9 @@ import SockJS from "sockjs-client";
 import { useNavigate } from "react-router-dom";
 import { startRaceAPI } from "../utils/api";
 
-const API_BASE = process.env.REACT_APP_API_URL || "http://localhost:8080";
+const API_BASE =
+  process.env.REACT_APP_API_URL ||
+  "https://ant-international-assessment-632916040300.asia-southeast1.run.app";
 const socketUrl = API_BASE + "/race-ws";
 
 const CarRace = ({ carList }) => {
