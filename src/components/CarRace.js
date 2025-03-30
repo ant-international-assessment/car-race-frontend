@@ -18,6 +18,7 @@ const CarRace = ({ carList }) => {
   const clientRef = useRef(null);
   const carsRef = useRef({});
   const navigate = useNavigate();
+  const [countdown, setCountdown] = useState(null);
 
   const calculateScore = (position) => Math.max(100 - position * 10, 0);
 
@@ -30,6 +31,11 @@ const CarRace = ({ carList }) => {
 
     setRacePhase("racing");
   };
+  useEffect(() => {
+    if (!carList || carList.length === 0) {
+      navigate("/start");
+    }
+  }, [carList, navigate]);
 
   useEffect(() => {
     const client = new Client({
@@ -55,10 +61,18 @@ const CarRace = ({ carList }) => {
           });
         });
 
-        // ✅ Delay race start by 3 seconds after WebSocket connects
-        setTimeout(() => {
-          // startRace();
-        }, 3000);
+        // Countdown 3...2...1...
+        let count = 3;
+        setCountdown(count);
+        const countdownInterval = setInterval(() => {
+          count--;
+          setCountdown(count);
+          if (count === 0) {
+            clearInterval(countdownInterval);
+            setCountdown(null);
+            startRace(); // Start race after countdown
+          }
+        }, 1000);
       },
     });
 
@@ -94,8 +108,17 @@ const CarRace = ({ carList }) => {
 
   return (
     <div className="container">
-      <h2>🚦 Race in Progress</h2>
-
+      <h2>Race in Progress,</h2>
+      <h4>Using websocket and thread pool (Java) to simulate the race </h4>
+      <p>
+        Each track will represent a java thread, and the positions of the cars
+        will be continuously fetched from the server via WebSocket.
+      </p>
+      {countdown !== null && (
+        <div className="countdown-box">
+          <h1 className="countdown-text">🚦 {countdown} </h1>
+        </div>
+      )}
       <div className="race-track">
         {carList.map((car) => (
           <div className="car-wrapper" key={car.id}>
@@ -124,7 +147,7 @@ const CarRace = ({ carList }) => {
         ))}
       </div>
       <div className="ranking-board">
-        <h3 className="ranking-title">🏁 Race Results</h3>
+        <h3 className="ranking-title">Race Results</h3>
         <ul className="ranking-list">
           {liveRanking.map((car, index) => {
             const medal =

@@ -181,3 +181,19 @@
   color: #4a5568;
   font-weight: 500;
 }
+.countdown-box {
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 40px;
+  border-radius: 20px;
+  color: white;
+}
+
+.countdown-text {
+  font-size: 5rem;
+  text-align: center;
+}

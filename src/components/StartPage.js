@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { startRaceAPI, fetchLeaderboardAPI } from "../utils/api";
 
 const StartPage = ({ setRaceStarted, setCarList, user }) => {
-  const [numCars, setNumCars] = useState(2);
+  const [numCars, setNumCars] = useState(10);
   const [userCarName, setUserCarName] = useState("");
   const [leaderboard, setLeaderboard] = useState([]);
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const StartPage = ({ setRaceStarted, setCarList, user }) => {
   }, [user]);
 
   const handleNumChange = (e) => {
-    const count = Math.max(2, Math.min(10, Number(e.target.value)));
+    const count = Math.max(2, Math.min(100, Number(e.target.value)));
     setNumCars(count);
   };
 
@@ -36,10 +36,8 @@ const StartPage = ({ setRaceStarted, setCarList, user }) => {
 
     console.log("Car list:", cars);
 
-    await startRaceAPI(cars);
-
-    setCarList(cars);
-    navigate("/race");
+    setCarList(cars); // ✅ Save cars to state
+    navigate("/race"); // ✅ Move to CarRace where the actual startRaceAPI is called
   };
 
   const fetchLeaderboard = async () => {
@@ -67,11 +65,11 @@ const StartPage = ({ setRaceStarted, setCarList, user }) => {
         <h1 className="title">Ready, Set, Go!</h1>
 
         <div className="form-group">
-          <label>Number of Cars (2–10):</label>
+          <label>Number of Cars (2–100):</label>
           <input
             type="number"
             min="2"
-            max="10"
+            max="100"
             value={numCars}
             onChange={handleNumChange}
             className="input-field"
