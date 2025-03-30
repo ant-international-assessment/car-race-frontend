@@ -99,15 +99,17 @@ const StartPage = ({ setRaceStarted, setCarList, user }) => {
 
       <div className="leaderboard-card">
         <h3 className="leaderboard-title">🏆 Leaderboard</h3>
-        <ul className="leaderboard-list">
-          {leaderboard.map((user, index) => (
-            <li key={user.userId} className="leaderboard-item">
-              <span className="rank">{index + 1}.</span>
-              <span className="user-id">{user.userId}</span>
-              <span className="score">{user.totalScore} pts</span>
-            </li>
-          ))}
-        </ul>
+        {leaderboard && leaderboard.length > 0 && (
+          <ul className="leaderboard-list">
+            {leaderboard.map((user, index) => (
+              <li key={user.userId} className="leaderboard-item">
+                <span className="rank">{index + 1}.</span>
+                <span className="user-id">{user.userId}</span>
+                <span className="score">{user.totalScore} pts</span>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
     </div>
   );
