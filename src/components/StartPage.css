@@ -33,7 +33,19 @@
     margin: 15px 0;
     text-align: left;
   }
-  
+  .cars-num {
+    font-size: 2rem;
+    box-sizing: border-box;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+    text-align: center;
+    font-weight: bold;
+  }
   .input-field {
     box-sizing: border-box;
     width: 100%;
@@ -43,7 +55,7 @@
     border: 1px solid #ccc;
     margin-top: 5px;
   }
-  
+
   .start-button {
     margin-top: 25px;
     width: 100%;
@@ -52,7 +64,7 @@
     padding: 12px;
     font-size: 16px;
     border: none;
-    border-radius: 12px;
+    border-radius: 8px;
     cursor: pointer;
     transition: background-color 0.3s ease;
   }

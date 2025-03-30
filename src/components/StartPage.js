@@ -72,7 +72,7 @@ const StartPage = ({ setRaceStarted, setCarList, user }) => {
             max="100"
             value={numCars}
             onChange={handleNumChange}
-            className="input-field"
+            className="cars-num"
           />
         </div>
 
