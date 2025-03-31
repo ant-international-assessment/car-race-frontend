@@ -10,7 +10,11 @@ const SignupPage = () => {
 
   const handleSignup = async () => {
     try {
-      // If no "@" present, append "@test.com"
+      if (password.length < 6) {
+        alert("Password must be at least 6 characters.");
+        return;
+      }
+  
       const finalEmail = email.includes("@") ? email : `${email}@test.com`;
 
       const res = await signupAPI(finalEmail, password);
@@ -23,11 +27,12 @@ const SignupPage = () => {
       alert("Signup failed: " + err.message);
     }
   };
+  
 
   return (
     <div className="auth-wrapper">
       <div className="auth-card">
-        <h2 className="auth-title">📝 Sign Up</h2>
+        <h2 className="auth-title">Sign Up</h2>
         <input
           type="email"
           placeholder="yourEmail@abc.com"
